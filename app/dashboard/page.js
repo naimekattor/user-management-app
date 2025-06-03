@@ -161,7 +161,10 @@ export default function DashboardPage() {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user._id} className="border-t">
+              <tr
+                key={user._id}
+                className={`border-t ${user.isBlocked ? "text-gray-400" : ""}`}
+              >
                 <td>
                   <input
                     type="checkbox"
