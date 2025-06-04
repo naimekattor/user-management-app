@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -29,68 +30,121 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         setError(data.error || "Something went wrong");
+        await Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data.error || "Something went wrong",
+        });
         return;
       }
 
       setSuccess(data.message);
       setForm({ name: "", email: "", password: "" });
 
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
+      await Swal.fire({
+        icon: "success",
+        title: "Registration successful",
+        text: data.message,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      router.push("/login");
     } catch (err) {
       setError("Network error");
+      await Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Network error",
+      });
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white shadow-md rounded-xl p-6 w-full max-w-md space-y-4"
-      >
-        <h2 className="text-2xl font-semibold text-center">Register</h2>
+    <div className="flex flex-col md:flex-row">
+      <div className="bg-[url('/login-bg.png')] bg-center bg-cover flex-1">
+        <div className="flex-1 place-items-center flex justify-center h-screen flex-col px-6 py-8">
+          <Image
+            src={"/login-img.png"}
+            width={350}
+            height={308}
+            alt="login-img"
+          />
+          <h1 className="text-[32px] text-[#002058] font-semibold text-center my-6">
+            Welcome to The User Management App
+          </h1>
+          <p className="text-[14px] text-center text-[#002058]">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam.
+          </p>
+        </div>
+      </div>
+      <div className="flex-1 place-items-center flex justify-center bg-white">
+        <div className="w-full max-w-md p-8">
+          <h2 className="text-[28px] mb-8 text-[#002058] font-semibold text-center">
+            Register
+          </h2>
+          <form
+            onSubmit={handleSubmit}
+            className=" p-6 w-full max-w-md space-y-4"
+          >
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {success && <p className="text-green-500 text-sm">{success}</p>}
+            <label className="mb-2 w-full text-[#685F78] font-medium">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md"
+              required
+            />
+            <label className="mb-2 w-full text-[#685F78] font-medium">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md"
+              required
+            />
+            <label className="mb-2 w-full text-[#685F78] font-medium">
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-md"
+              required
+            />
 
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        {success && <p className="text-green-500 text-sm">{success}</p>}
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded-md"
-          required
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded-md"
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded-md"
-          required
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md"
-        >
-          Register
-        </button>
-      </form>
+            <button
+              type="submit"
+              className="bg-red-600 text-white px-4 py-2 rounded-md w-full cursor-pointer"
+            >
+              Register
+            </button>
+          </form>
+          <div className=" mt-3 text-center ">
+            <p className="mb-0">
+              Already have an account ?{" "}
+              <a className="text-red-600" href="/login">
+                Login
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { FaLock } from "react-icons/fa";
 import { FaLockOpen } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { formatDistanceToNow } from "date-fns";
+import Swal from "sweetalert2";
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState(null);
@@ -61,14 +64,57 @@ export default function DashboardPage() {
   };
 
   const handleAction = async (action) => {
-    await fetch("/api/users", {
+    let confirmText = "";
+    if (action === "block")
+      confirmText = "Are you sure you want to block the selected users?";
+    if (action === "unblock")
+      confirmText = "Are you sure you want to unblock the selected users?";
+    if (action === "delete")
+      confirmText =
+        "Are you sure you want to delete the selected users? This action cannot be undone.";
+
+    const result = await Swal.fire({
+      title: "Confirm",
+      text: confirmText,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes",
+    });
+
+    if (!result.isConfirmed) return;
+
+    const res = await fetch("/api/users", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ action, userIds: selectedIds }),
     });
-    const updated = await (await fetch("/api/users")).json();
-    setUsers(updated);
-    setSelectedIds([]);
+
+    if (res.ok) {
+      await Swal.fire({
+        icon: "success",
+        title: "Success",
+        text:
+          action === "block"
+            ? "Users blocked successfully."
+            : action === "unblock"
+            ? "Users unblocked successfully."
+            : "Users deleted successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      const updated = await (await fetch("/api/users")).json();
+      setUsers(updated);
+      setSelectedIds([]);
+    } else {
+      const data = await res.json();
+      await Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: data.message || "Action failed.",
+      });
+    }
   };
 
   if (!user && !error) return <p>Loading...</p>;
@@ -174,11 +220,15 @@ export default function DashboardPage() {
                 </td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
-                <td>
-                  {user.lastLogin
-                    ? new Date(user.lastLogin).toLocaleString()
-                    : "Never"}
-                </td>
+                <div className="tooltip tooltip-top" data-tip={user.lastLogin}>
+                  <td>
+                    {user.lastLogin
+                      ? `${formatDistanceToNow(new Date(user.lastLogin), {
+                          addSuffix: true,
+                        })}`
+                      : "Never"}
+                  </td>
+                </div>
                 <td>{user.isBlocked ? "Blocked" : "Active"}</td>
               </tr>
             ))}
