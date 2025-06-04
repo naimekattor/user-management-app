@@ -149,44 +149,7 @@ export default function DashboardPage() {
           </span>
         </button>
       </div>
-      {/* <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th>
-              <input
-                type="checkbox"
-                checked={selectedIds.length === users.length}
-                onChange={selectAll}
-              />
-            </th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Last Login</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id} className="border-t">
-              <td>
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(user._id)}
-                  onChange={() => toggleCheckbox(user._id)}
-                />
-              </td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>
-                {user.lastLogin
-                  ? new Date(user.lastLogin).toLocaleString()
-                  : "Never"}
-              </td>
-              <td>{user.isBlocked ? "Blocked" : "Active"}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
+
       <div className="overflow-x-auto rounded-box border border-base-content bg-white shadow-md">
         <table className="table">
           {/* head */}

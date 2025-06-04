@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true, // ✅ This creates a unique index in MongoDB
+      unique: true,
       lowercase: true,
       trim: true,
     },
@@ -20,11 +20,6 @@ const userSchema = new mongoose.Schema(
       minlength: 6,
     },
     isBlocked: { type: Boolean, default: false },
-    /* status: {
-      type: String,
-      enum: ["active", "blocked"],
-      default: "active",
-    }, */
     lastLogin: {
       type: Date,
       default: null,
@@ -39,5 +34,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Prevent model overwrite error in dev
 export default mongoose.models.User || mongoose.model("User", userSchema);

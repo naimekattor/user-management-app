@@ -74,9 +74,8 @@ export default function RegisterPage() {
             Welcome to The User Management App
           </h1>
           <p className="text-[14px] text-center text-[#002058]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam.
+            Manage your users efficiently. Login to access your dashboard, view
+            user activity, and control user access securely.
           </p>
         </div>
       </div>

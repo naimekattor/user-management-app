@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import User from "@/models/User"; // replace with actual path
+import User from "@/models/User";
 import { connectDB } from "@/lib/mongodb";
 
 export async function GET(req) {
