@@ -88,7 +88,7 @@ export default function RegisterPage() {
             onSubmit={handleSubmit}
             className=" p-6 w-full max-w-md space-y-4"
           >
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* {error && <p className="text-red-500 text-sm">{error}</p>} */}
             {success && <p className="text-green-500 text-sm">{success}</p>}
             <label className="mb-2 w-full text-[#685F78] font-medium">
               Full Name
