@@ -137,7 +137,7 @@ export default function RegisterPage() {
           </form>
           <div className=" mt-3 text-center ">
             <p className="mb-0">
-              Already have an account ?{" "}
+              Already have an account ?
               <a className="text-red-600" href="/login">
                 Login
               </a>

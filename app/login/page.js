@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -8,11 +8,22 @@ export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [users, setUsers] = useState([]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  useEffect(() => {
+    fetch("/api/users")
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+        data.forEach((user) =>
+          console.log(`User ${user.email} isBlocked:`, user.isBlocked)
+        ); // log isBlocked
+        console.log("Fetched users:", data);
+      });
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -25,6 +36,22 @@ export default function LoginPage() {
       });
 
       const data = await res.json();
+      console.log("Login response data:", data); // Log the response for debugging
+
+      if (
+        users.some(
+          (user) => user.email === data.user.email && user.isBlocked === true
+        )
+      ) {
+        setError("Your account is blocked.");
+        await Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Your account is blocked.",
+        });
+        return;
+      }
+      console.log("Login response:", data.user.email); // Log the response for debugging
 
       if (!res.ok) {
         setError(data.message || "Login failed");
