@@ -185,11 +185,10 @@ export default function DashboardPage() {
                 <td>{user.email}</td>
                 <div className="tooltip tooltip-top" data-tip={user.lastLogin}>
                   <td>
-                    {user.lastLogin
-                      ? `${formatDistanceToNow(new Date(user.lastLogin), {
-                          addSuffix: true,
-                        })}`
-                      : "Never"}
+                    {user.lastLogin &&
+                      `${formatDistanceToNow(new Date(user.lastLogin), {
+                        addSuffix: true,
+                      })}`}
                   </td>
                 </div>
                 <td>{user.isBlocked ? "Blocked" : "Active"}</td>
